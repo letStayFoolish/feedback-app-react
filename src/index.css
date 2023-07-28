@@ -148,7 +148,7 @@ input:focus {
 .btn {
   color: #fff;
   border: 0;
-  border-radius: 8px;
+  border-radius: 8px!important;
   color: #fff;
   width: 100px;
   height: 40px;
