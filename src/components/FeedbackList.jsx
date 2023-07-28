@@ -5,9 +5,6 @@ const FeedbackList = ({ feedback, deleteFeedback }) => {
   if (!feedback || feedback.length === 0) {
     return <p>No feedback.</p>
   }
-  const feedbackElement = feedback.map((item, _index) => {
-    return item
-  })
 
   return (
     <div className='feedback-list'>
