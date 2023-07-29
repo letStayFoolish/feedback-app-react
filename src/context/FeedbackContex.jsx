@@ -3,7 +3,7 @@ import { createContext, useState} from "react";
 
 const FeedbackContext = createContext()
 
-const FeedbackProvider = ({children}) => {
+export const FeedbackProvider = ({ children }) => {
   const [feedback, setFeedback] = useState([
     {
       id: 1,
@@ -11,10 +11,13 @@ const FeedbackProvider = ({children}) => {
       rating: 10
     }
   ])
-  return <FeedbackContext.Provider value={{feedback}}
+  return (
+    <FeedbackContext.Provider
+      value={{ feedback }}
   >
     {children}
   </FeedbackContext.Provider>
+  )
 }
 
-export default FeedbackProvider
+export default FeedbackContext
