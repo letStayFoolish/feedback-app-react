@@ -1,5 +1,5 @@
 import Card from './shared/Card'
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import Button from "./shared/Button";
 import RatingSelect from "./RatingSelect";
 import FeedbackContext from "../context/FeedbackContex";
@@ -7,23 +7,33 @@ import FeedbackContext from "../context/FeedbackContex";
 const FeedbackForm = () => {
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [text, setText] = useState('')
-  const [message, setMessage] = useState('')
   const [rating, setRating] = useState(10)
+  const [message, setMessage] = useState('')
 
-  const { addFeedback } = useContext(FeedbackContext)
+  const {addFeedback, feedbackEdit} = useContext(FeedbackContext)
+
+  useEffect(() => {
+    if (feedbackEdit.item.edit !== false) {
+      setBtnDisabled(false)
+      setText(feedbackEdit.item.text)
+      setRating(feedbackEdit.item.rating) // set rating in a Form component, but also we need to change it visually.
+    }
+  }, [feedbackEdit]);
 
   function handleTextChange(e) {
     if (text === '') {
       setBtnDisabled(true)
       setMessage(null)
-    } else if ((text !== '') && (text.trim().length <= 10)) {
+
+      // prettier-ignore
+    } else if (text.trim().length < 10) { // 👈 check for less than 10
+      setMessage('Text must be at least 10 characters')
       setBtnDisabled(true)
-      setMessage('Text must be at least 10 characters.')
     } else {
-      setBtnDisabled(false)
       setMessage(null)
+      setBtnDisabled(false)
     }
-    setText(e.target.value)
+    setText(text)
   }
 
   function handleSubmit(e) {
