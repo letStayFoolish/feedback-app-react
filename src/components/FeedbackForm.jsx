@@ -1,12 +1,17 @@
 import Card from './shared/Card'
-import {useState} from "react";
+import {useState, useContext} from "react";
 import Button from "./shared/Button";
 import RatingSelect from "./RatingSelect";
-const FeedbackForm = ({ handleAdd }) => {
+import FeedbackContext from "../context/FeedbackContex";
+
+const FeedbackForm = () => {
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [text, setText] = useState('')
   const [message, setMessage] = useState('')
   const [rating, setRating] = useState(10)
+
+  const { addFeedback } = useContext(FeedbackContext)
+
   function handleTextChange(e) {
     if (text === '') {
       setBtnDisabled(true)
@@ -28,18 +33,19 @@ const FeedbackForm = ({ handleAdd }) => {
         rating,
         text
       }
-      handleAdd(newFeedback)
+      addFeedback(newFeedback)
       setText('')
     }
   }
+
   return (
     <Card>
       <form onSubmit={handleSubmit}>
         <h2>How would you rate your service with us></h2>
         {/*@todo - rating select component*/}
-        <RatingSelect select={(rating) => setRating(rating)} />
+        <RatingSelect select={(rating) => setRating(rating)}/>
         <div className="input-group">
-          <input onChange={handleTextChange} type="text" value={text} placeholder='Write a review' />
+          <input onChange={handleTextChange} type="text" value={text} placeholder='Write a review'/>
           <Button type='submit' isDisabled={btnDisabled}>Send</Button>
         </div>
         {message && <div className="message">{message}</div>}

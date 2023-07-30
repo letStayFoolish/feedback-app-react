@@ -12,7 +12,7 @@ const FeedbackStats = () => {
   average = average.toFixed(1).replace(/[.,]0$/, '')
   return (
     <div className='feedback-stats'>
-      <h4>{rev} Reviews</h4>
+      { rev === 1 ? <h4>{rev} Review</h4> : <h4>{rev} Reviews</h4>}
       <h4>Average rating: {isNaN(average) ? 0 : average}</h4>
     </div>
   )
