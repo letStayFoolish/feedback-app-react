@@ -10,7 +10,7 @@ const FeedbackForm = () => {
   const [rating, setRating] = useState(10)
   const [message, setMessage] = useState('')
 
-  const {addFeedback, feedbackEdit} = useContext(FeedbackContext)
+  const {addFeedback, feedbackEdit, updateFeedback} = useContext(FeedbackContext)
 
   useEffect(() => {
     if (feedbackEdit.item.edit !== false) {
@@ -24,7 +24,6 @@ const FeedbackForm = () => {
     if (text === '') {
       setBtnDisabled(true)
       setMessage(null)
-
       // prettier-ignore
     } else if (text.trim().length < 10) { // 👈 check for less than 10
       setMessage('Text must be at least 10 characters')
@@ -33,7 +32,7 @@ const FeedbackForm = () => {
       setMessage(null)
       setBtnDisabled(false)
     }
-    setText(text)
+    setText(e.target.value)
   }
 
   function handleSubmit(e) {
@@ -43,7 +42,13 @@ const FeedbackForm = () => {
         rating,
         text
       }
-      addFeedback(newFeedback)
+
+      if (feedbackEdit.edit === true) {
+        updateFeedback(feedbackEdit.item.id, newFeedback)
+      } else {
+        addFeedback(newFeedback)
+      }
+
       setText('')
     }
   }
