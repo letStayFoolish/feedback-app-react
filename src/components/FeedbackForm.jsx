@@ -1,13 +1,13 @@
-import Card from './shared/Card'
 import {useState, useContext, useEffect} from "react";
-import Button from "./shared/Button";
 import RatingSelect from "./RatingSelect";
+import Card from './shared/Card'
+import Button from "./shared/Button";
 import FeedbackContext from "../context/FeedbackContex";
 
 const FeedbackForm = () => {
-  const [btnDisabled, setBtnDisabled] = useState(true)
   const [text, setText] = useState('')
   const [rating, setRating] = useState(10)
+  const [btnDisabled, setBtnDisabled] = useState(true)
   const [message, setMessage] = useState('')
 
   const {addFeedback, feedbackEdit, updateFeedback} = useContext(FeedbackContext)
@@ -21,7 +21,8 @@ const FeedbackForm = () => {
   }, [feedbackEdit]);
 
   // prettier-ignore
-  const handleTextChange = ({ target: { value } }) => { // 👈  get the value
+  const handleTextChange = (e) => {
+    const { value } = e.target // 👈  get the value
     if (value === '') {
       setBtnDisabled(true)
       setMessage(null)
@@ -41,8 +42,8 @@ const FeedbackForm = () => {
     e.preventDefault()
     if (text.trim().length > 10) {
       const newFeedback = {
-        rating,
-        text
+        text,
+        rating
       }
 
       if (feedbackEdit.edit === true) {
@@ -51,6 +52,9 @@ const FeedbackForm = () => {
         addFeedback(newFeedback)
       }
 
+      // NOTE: reset to default state after submission
+      setBtnDisabled(true) // 👈 add this line to reset disabled
+      setRating(10) //👈 add this line to set rating back to 10
       setText('')
     }
   }
@@ -59,9 +63,14 @@ const FeedbackForm = () => {
     <Card>
       <form onSubmit={handleSubmit}>
         <h2>How would you rate your service with us></h2>
-        <RatingSelect select={(rating) => setRating(rating)}/>
+        <RatingSelect select={setRating} selected={rating} />
         <div className="input-group">
-          <input onChange={handleTextChange} type="text" value={text} placeholder='Write a review'/>
+          <input
+            onChange={handleTextChange}
+            type="text"
+            value={text}
+            placeholder='Write a review'
+          />
           <Button type='submit' isDisabled={btnDisabled}>Send</Button>
         </div>
         {message && <div className="message">{message}</div>}
