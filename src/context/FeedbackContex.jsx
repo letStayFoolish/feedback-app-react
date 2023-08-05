@@ -22,6 +22,7 @@ export const FeedbackProvider = ({ children }) => {
     const data = await response.json()
 
     setFeedback(data)
+    setIsLoading(false)
   }
 
   // Set item to be updated
