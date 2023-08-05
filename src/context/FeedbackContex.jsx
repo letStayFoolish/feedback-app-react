@@ -1,32 +1,28 @@
 // Context provides a way to pass data through the component three without having to pass props down manually at every level.
-import { createContext, useState} from "react";
+import { createContext, useState, useEffect} from "react";
 import {v4 as uuidv4} from "uuid";
 
 const FeedbackContext = createContext()
 
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState([
-    {
-      id: 1,
-      text: 'This is feedback item 1',
-      rating: 10
-    },
-    {
-      id: 2,
-      text: 'This is feedback item 2',
-      rating: 7
-    },
-    {
-      id: 3,
-      text: 'This is feedback item 3',
-      rating: 8
-    }
-  ])
+  const [isLoading, setIsLoading] = useState(true)
+  const [feedback, setFeedback] = useState([])
 
   const [feedbackEdit, setFeedbackEdit] = useState({
     item: {},
     edit: false
   })
+
+  useEffect(() => {
+    fetchFeedback()
+  }, []);
+
+  async function fetchFeedback() {
+    const response = await fetch(`http://localhost:5000/feedback?_sort=id&_order=desc`)
+    const data = await response.json()
+
+    setFeedback(data)
+  }
 
   // Set item to be updated
   function editFeedback(item) {
@@ -60,10 +56,11 @@ export const FeedbackProvider = ({ children }) => {
     <FeedbackContext.Provider
       value={{
         feedback,
+        isLoading,
+        feedbackEdit,
         deleteFeedback,
         addFeedback,
         editFeedback,
-        feedbackEdit,
         updateFeedback
     }}
   >
