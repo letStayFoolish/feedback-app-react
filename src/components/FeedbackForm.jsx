@@ -20,19 +20,21 @@ const FeedbackForm = () => {
     }
   }, [feedbackEdit]);
 
-  function handleTextChange(e) {
-    if (text === '') {
+  // prettier-ignore
+  const handleTextChange = ({ target: { value } }) => { // 👈  get the value
+    if (value === '') {
       setBtnDisabled(true)
       setMessage(null)
+
       // prettier-ignore
-    } else if (text.trim().length < 10) { // 👈 check for less than 10
+    } else if (value.trim().length < 10) { // 👈 check for less than 10
       setMessage('Text must be at least 10 characters')
       setBtnDisabled(true)
     } else {
       setMessage(null)
       setBtnDisabled(false)
     }
-    setText(e.target.value)
+    setText(value)
   }
 
   function handleSubmit(e) {
@@ -57,7 +59,6 @@ const FeedbackForm = () => {
     <Card>
       <form onSubmit={handleSubmit}>
         <h2>How would you rate your service with us></h2>
-        {/*@todo - rating select component*/}
         <RatingSelect select={(rating) => setRating(rating)}/>
         <div className="input-group">
           <input onChange={handleTextChange} type="text" value={text} placeholder='Write a review'/>
